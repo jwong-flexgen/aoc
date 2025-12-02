@@ -21,7 +21,7 @@ function processInputFile(inputText) {
     return { firstArray, secondArray };
 }
 
-const filePath = './input.txt';
+const filePath = './day01.txt';
 
 fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
@@ -36,6 +36,22 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     let total = 0;
 
     // part 1
+    // for(let i = 0; i < sortedFirstArray.length; i++) {
+    //   total += Math.abs(sortedFirstArray[i] - sortedSecondArray[i]);
+    // }
+
+    // part 2
+    for(let i = 0; i < sortedFirstArray.length; i++) {
+      let localTotal = 0;
+
+      sortedSecondArray.forEach((x) => {
+        if(x === sortedFirstArray[i]) {
+          localTotal += 1;
+        }
+      });
+
+      total += sortedFirstArray[i] * localTotal;
+    }
 
     console.log(total);
 });
