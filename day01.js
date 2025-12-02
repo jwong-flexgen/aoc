@@ -1,24 +1,15 @@
 const fs = require('fs');
 
 function processInputFile(inputText) {
-    const firstArray = [];
-    const secondArray = [];
+    const arr = [];
     const lines = inputText.split('\n');
 
     for (const line of lines) {
         if (line.trim() === '') continue;
-        const parts = line.split('   ');
-        if (parts.length === 2) {
-            const num1 = parseFloat(parts[0].trim());
-            const num2 = parseFloat(parts[1].trim());
-            if (!isNaN(num1) && !isNaN(num2)) {
-                firstArray.push(num1);
-                secondArray.push(num2);
-            }
-        }
+        arr.push([line[0], line.substring(1)]);
     }
 
-    return { firstArray, secondArray };
+    return arr;
 }
 
 const filePath = './input.txt';
@@ -29,13 +20,47 @@ fs.readFile(filePath, 'utf8', (err, data) => {
         return;
     }
 
-    const { firstArray, secondArray } = processInputFile(data);
+    const arr = processInputFile(data);
 
-    const sortedFirstArray = firstArray.sort((a, b) => a - b);
-    const sortedSecondArray = secondArray.sort((a, b) => a - b);
+    let position = 50;
     let total = 0;
 
     // part 1
+    // for (const [dir, step] of arr) {
+    //     if (dir === 'L') {
+    //         position -= Number(step);
+    //         while (position < 0) {
+    //             position += 100;
+    //         }
+    //     }
+    //     if (dir === 'R') {
+    //         position += Number(step);
+    //         while (position > 99) {
+    //             position -= 100;
+    //         }
+    //     }
+    //     if (position === 0) {
+    //         total++;
+    //     }
+    // }
+
+    // part 2
+    for (const [dir, step] of arr) {
+        if (dir === 'L') {
+            for (let x = Number(step); x > 0; x--) {
+                position--;
+                if (position === 0) total++;
+                if (position < 0) position = 99;
+            }
+        }
+        if (dir === 'R') {
+            for (let x = Number(step); x > 0; x--) {
+                position++;
+                if (position > 99) position = 0;
+                if (position === 0) total++;
+            }
+        }
+    }
 
     console.log(total);
 });
